@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teachers', function (Blueprint $table) {
-            $table->string('nik')->primary();
+        Schema::create('students', function (Blueprint $table) {
+            $table->string('nisn')->primary();
             $table->string('name', 100);
-            $table->string('email')->unique();
-            $table->string('password')->unique();
+            $table->string('class');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teachers');
+        Schema::dropIfExists('students');
     }
 };
