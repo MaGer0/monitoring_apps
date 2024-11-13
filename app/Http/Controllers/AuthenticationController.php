@@ -20,9 +20,14 @@ class AuthenticationController extends Controller
 
         if (!$teacher || ! Hash::check($request->password, $teacher->password)) {
             throw ValidationException::withMessages([
-                "Login Gagal"   
+                "Login Gagal"
             ]);
         }
         return $teacher->createToken('user login')->plainTextToken;
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
     }
 }

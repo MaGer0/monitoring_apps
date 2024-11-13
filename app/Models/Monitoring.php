@@ -12,7 +12,6 @@ class Monitoring extends Model
 
     protected $fillable = [
         'title',
-        'teachers_nik',
         'description',
     ];
 }
