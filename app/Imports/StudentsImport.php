@@ -4,33 +4,19 @@ namespace App\Imports;
 
 use App\Models\Student;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class StudentsImport implements ToCollection
+
+class StudentsImport implements ToCollection, WithHeadingRow
 {
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    // public function model(array $row)
-    // {
-    //     return new Student([
-    //         'nisn'     => $row[0],
-    //         'name'    => $row[1],
-    //         'class'    => $row[2],
-    //     ]);
-    // }
-
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
             Student::create([
-                'nisn' => $row[0],
-                'name' => $row[1],
-                'class' => $row[2],
+                'nisn' => $row['nisn'],
+                'name' => $row['nama'],
+                'class' => $row['kelas'],
             ]);
         }
     }
