@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class MonitoringController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $monitoring = Monitoring::all();
         return MonitoringResource::collection($monitoring);
     }
@@ -20,7 +21,13 @@ class MonitoringController extends Controller
             'description' => 'required'
         ]);
 
-        $monitoring = Monitoring::create($validated);
+        $monitoringPost['title'] = $validated['title'];
+        $monitoringPost['description'] = $validated['description'];
+        $monitoring = Monitoring::create($monitoringPost);
+
+        $detailStudentMonitoringPost['monitoring_id'] = $monitoring['id'];
+        $detailStudentMonitoringPost['student'];
+
         return new MonitoringResource($monitoring);
     }
 }
