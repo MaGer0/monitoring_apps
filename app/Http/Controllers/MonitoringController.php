@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class MonitoringController extends Controller
 {
+    public function index(){
+        $monitoring = Monitoring::all();
+        return MonitoringResource::collection($monitoring);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
