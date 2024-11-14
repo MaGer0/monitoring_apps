@@ -8,9 +8,10 @@ use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\TeacherController;
 
 Route::post('/login', [AuthenticationController::class, 'login']);
+Route::get('/monitorings', [MonitoringController::class, 'index']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/logout', [AuthenticationController::class, 'logout']);
-    Route::get('/monitorings', [MonitoringController::class, 'store']);
+    Route::post('/monitorings', [MonitoringController::class, 'store']);
     Route::get('/teachers/@me', [TeacherController::class, 'me']);
 });
