@@ -11,6 +11,7 @@ class Monitoring extends Model
     use HasFactory;
 
     protected $fillable = [
+        'teachers_nik',
         'title',
         'description',
     ];
