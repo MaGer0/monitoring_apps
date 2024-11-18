@@ -12,7 +12,7 @@ class MonitoringController extends Controller
     public function index()
     {
         $monitoring = Monitoring::all();
-        return MonitoringResource::collection($monitoring->loadMissing("students"));
+        return MonitoringResource::collection($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,keterangan']));
     }
 
     public function store(Request $request)

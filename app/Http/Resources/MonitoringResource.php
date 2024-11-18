@@ -16,8 +16,15 @@ class MonitoringResource extends JsonResource
     {
         return [
             'title' => $this->title,
+            'Teacher' => $this->whenLoaded('teacher'),
             'description' => $this->description,
-            'students' => $this->whenLoaded('students')
+            'date' => $this->date,
+            'not_present' => $this->whenLoaded('students', function () {
+                return collect($this->students)->each(function ($student) {
+                    $student->student;
+                    return $student;
+                });
+            })
         ];
     }
 }
