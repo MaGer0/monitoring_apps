@@ -9,6 +9,8 @@ class DetailStudentMonitoring extends Model
 {
     use HasFactory;
 
+    protected $table = 'detail_students_monitorings';
+
     protected $fillable = [
         'monitoring_id',
         'students_nisn',
