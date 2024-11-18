@@ -12,9 +12,6 @@ class DetailStudentMonitoring extends Model
     protected $fillable = [
         'monitoring_id',
         'students_nisn',
-        'absend',
-        'description',
+        'keterangan',
     ];
-
-
 }
