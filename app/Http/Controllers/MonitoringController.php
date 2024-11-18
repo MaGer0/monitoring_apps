@@ -12,7 +12,7 @@ class MonitoringController extends Controller
     public function index()
     {
         $monitoring = Monitoring::all();
-        return MonitoringResource::collection($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,keterangan']));
+        return MonitoringResource::collection($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']));
     }
 
     public function store(Request $request)
@@ -41,6 +41,6 @@ class MonitoringController extends Controller
             DetailStudentMonitoring::create($detailStudentMonitoring);
         }
 
-        return new MonitoringResource($monitoring->loadMissing("students"));
+        return new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']));
     }
 }
