@@ -6,14 +6,13 @@ use App\Http\Resources\MonitoringResource;
 use App\Models\DetailStudentMonitoring;
 use App\Models\Monitoring;
 use Illuminate\Http\Request;
-use Validator;
 
 class MonitoringController extends Controller
 {
     public function index()
     {
         $monitoring = Monitoring::all();
-        return MonitoringResource::collection($monitoring);
+        return MonitoringResource::collection($monitoring->loadMissing("students"));
     }
 
     public function store(Request $request)
@@ -22,6 +21,7 @@ class MonitoringController extends Controller
             'teachers_nik' => 'required',
             'title' => 'required',
             'description' => 'required',
+            'date' => 'required',
             'detailMonitoring' => 'required|array',
             'detailMonitoring.*.students_nisn' => 'required',
             'detailMonitoring.*.keterangan' => 'required'
@@ -30,6 +30,8 @@ class MonitoringController extends Controller
         $monitoringPost['teachers_nik'] = $validated['teachers_nik'];
         $monitoringPost['title'] = $validated['title'];
         $monitoringPost['description'] = $validated['description'];
+        $monitoringPost['date'] = $validated['date'];
+
         $monitoring = Monitoring::create($monitoringPost);
 
         foreach ($validated['detailMonitoring'] as $dsm) {
