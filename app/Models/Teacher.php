@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -33,5 +34,10 @@ class Teacher extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed'
         ];
+    }
+
+    public function monitorings(): HasMany
+    {
+        return  $this->hasMany(Monitoring::class, 'teachers_nik', 'nik');
     }
 }
