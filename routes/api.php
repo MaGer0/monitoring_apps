@@ -13,6 +13,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/monitorings', [MonitoringController::class, 'store']);
     Route::get('/teachers/@me', [TeacherController::class, 'me']);
     Route::get('/monitorings', [MonitoringController::class, 'index']);
+    Route::put('/monitorings/{id}', [MonitoringController::class, 'update']);
+    Route::delete('/monitorings/{id}', [MonitoringController::class, 'destroy']);
 });
 
 Route::post('/import', [StudentController::class, 'import']);
