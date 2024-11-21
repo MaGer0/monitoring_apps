@@ -19,14 +19,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Monitoring
     Route::get('/monitorings', [MonitoringController::class, 'index']);
     Route::post('/monitorings', [MonitoringController::class, 'store']);
-    Route::put('/monitorings/{id}', [MonitoringController::class, 'update']);
-    Route::delete('/monitorings/{id}', [MonitoringController::class, 'destroy']);
+    Route::put('/monitorings/{id}', [MonitoringController::class, 'update'])->middleware('MonitoringOwner');
+    Route::delete('/monitorings/{id}', [MonitoringController::class, 'destroy'])->middleware('MonitoringOwner');
 
     // Detail Student Monitoring
     Route::get('/notpresents', [DetailStudentMonitoringController::class, 'index']);
-    Route::post('/notpresents', [DetailStudentMonitoringController::class, 'store']);
-    Route::put('/notpresents/{id}', [DetailStudentMonitoringController::class, 'update']);
-    Route::delete('/notpresents/{id}', [DetailStudentMonitoringController::class, 'destroy']);
+    Route::post('/notpresents', [DetailStudentMonitoringController::class, 'store'])->middleware('DetailMonitoringOwner');
+    Route::put('/notpresents/{id}', [DetailStudentMonitoringController::class, 'update'])->middleware('DetailMonitoringOwner');
+    Route::delete('/notpresents/{id}', [DetailStudentMonitoringController::class, 'destroy'])->middleware('DetailMonitoringOwner');
 });
 
 Route::post('/import', [StudentController::class, 'import']);
