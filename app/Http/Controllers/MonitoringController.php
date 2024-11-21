@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Monitoring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DetailStudentMonitoring;
 use App\Http\Resources\MonitoringResource;
+use Carbon\Carbon;
 
 class MonitoringController extends Controller
 {
@@ -21,49 +23,33 @@ class MonitoringController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'teachers_nik' => 'required',
             'title' => 'required',
             'description' => 'required',
             'date' => 'required',
-            'detailMonitoring' => 'required|array',
-            'detailMonitoring.*.students_nisn' => 'required',
-            'detailMonitoring.*.keterangan' => 'required'
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i'
         ]);
 
-        $monitoringPost['teachers_nik'] = $validated['teachers_nik'];
-        $monitoringPost['title'] = $validated['title'];
-        $monitoringPost['description'] = $validated['description'];
-        $monitoringPost['date'] = $validated['date'];
+        $validated['teachers_nik'] = Auth::user()->nik;
 
-        $monitoring = Monitoring::create($monitoringPost);
+        $monitoring = Monitoring::create($validated);
 
-        foreach ($validated['detailMonitoring'] as $dsm) {
-            $detailStudentMonitoring['monitoring_id'] = $monitoring['id'];
-            $detailStudentMonitoring['students_nisn'] = $dsm['students_nisn'];
-            $detailStudentMonitoring['keterangan'] = $dsm['keterangan'];
-            DetailStudentMonitoring::create($detailStudentMonitoring);
-        }
-
-        return new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']));
+        return new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students']));
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'teachers_nik' => 'required',
             'title' => 'required',
             'description' => 'required',
             'date' => 'required',
-            'detailMonitoring' => 'required|array',
-            'detailMonitoring.*.students_nisn' => 'required',
-            'detailMonitoring.*.keterangan' => 'required'
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i'
         ]);
-        $monitoringUpdate['teachers_nik'] = $validated['teachers_nik'];
-        $monitoringUpdate['title'] = $validated['title'];
-        $monitoringUpdate['description'] = $validated['description'];
-        $monitoringUpdate['date'] = $validated['date'];
+        $validated['teachers_nik'] = Auth::user()->nik;
         $monitoring = Monitoring::findOrFail($id);
-        $monitoring->update($monitoringUpdate);
+        $monitoring->update($validated);
+
 
         return new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']));
     }
