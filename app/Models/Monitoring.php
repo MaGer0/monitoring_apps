@@ -15,7 +15,9 @@ class Monitoring extends Model
         'teachers_nik',
         'title',
         'description',
-        'date'
+        'date',
+        'start_time',
+        'end_time'
     ];
 
     public function students(): HasMany
