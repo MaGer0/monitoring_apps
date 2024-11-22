@@ -3,22 +3,30 @@
 namespace App\Imports;
 
 use App\Models\Student;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithSkipDuplicates;
+use Maatwebsite\Excel\Concerns\WithUpserts;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-
-class StudentsImport implements ToCollection, WithHeadingRow, WithSkipDuplicates
+class StudentsImport implements ToModel, WithHeadingRow, WithSkipDuplicates, WithBatchInserts, WithUpserts
 {
-    public function collection(Collection $rows)
+    public function model(array $row)
     {
-        foreach ($rows as $row) {
-            Student::create([
-                'nisn' => $row['nisn'],
-                'name' => $row['nama'],
-                'class' => $row['kelas'],
-            ]);
-        }
+        return new Student([
+            'nisn' => $row['nisn'],
+            'name' => $row['nama'],
+            'class' => $row['kelas'],
+        ]);
+    }
+
+    public function batchSize(): int
+    {
+        return 1000;
+    }
+
+    public function uniqueBy()
+    {
+        return ['nisn'];
     }
 }

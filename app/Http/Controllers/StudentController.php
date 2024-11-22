@@ -15,4 +15,6 @@ class StudentController extends Controller
 
         return 'Success!';
     }
+
+    
 }
