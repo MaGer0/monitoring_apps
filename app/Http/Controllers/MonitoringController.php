@@ -34,7 +34,7 @@ class MonitoringController extends Controller
 
         $monitoring = Monitoring::create($validated);
 
-        return new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students']));
+        return (new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students'])))->response()->setStatusCode(201);
     }
 
     public function update(Request $request, $id)
@@ -51,7 +51,7 @@ class MonitoringController extends Controller
         $monitoring->update($validated);
 
 
-        return new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']));
+        return (new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan'])))->response()->setStatusCode(200);
     }
 
     public function destroy($id)
@@ -59,6 +59,6 @@ class MonitoringController extends Controller
         $monitoring = Monitoring::findOrFail($id);
         $monitoring->delete();
 
-        return new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']));
+        return (new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan'])))->response()->setStatusCode(204);
     }
 }

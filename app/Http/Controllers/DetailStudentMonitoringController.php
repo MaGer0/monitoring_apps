@@ -16,7 +16,7 @@ use App\Http\Resources\DetailStudentMonitoringResource;
 
 class DetailStudentMonitoringController
 {
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
         $validated = $request->validate([
             '*.monitoring_id' => 'required|integer|exists:monitorings,id',
@@ -26,11 +26,12 @@ class DetailStudentMonitoringController
 
         // Bulk Insert
         $now = Carbon::now();
-        $detailStudentMonitoring = array_map(function ($dsm) use ($now) {
+        $detailStudentMonitoring = array_map(function ($dsm) use ($now, $id) {
             return [
-                'monitoring_id' => $dsm['monitoring_id'],
+                'monitoring_id' => $id,
                 'students_nisn' => $dsm['students_nisn'],
-                'keterangan' => $dsm['keterangan']
+                'keterangan' => $dsm['keterangan'],
+                'created_at' => $now
             ];
         }, $validated);
 
@@ -53,8 +54,8 @@ class DetailStudentMonitoringController
         ]);
 
         $nisnInRequest = array_column($validated, 'students_nisn');
-
-        DetailStudentMonitoring::where('monitoring_id', $validated[0]['monitoring_id'])
+        dd($id);
+        DetailStudentMonitoring::where('monitoring_id', $id)
             ->whereNotIn('students_nisn', $nisnInRequest)
             ->delete();
 
@@ -64,7 +65,6 @@ class DetailStudentMonitoringController
                 'monitoring_id' => $dsm['monitoring_id'],
                 'students_nisn' => $dsm['students_nisn'],
                 'keterangan' => $dsm['keterangan'],
-                'created_at' => $now,
                 'updated_at' => $now
             ];
         }, $validated);
