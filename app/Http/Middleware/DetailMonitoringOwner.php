@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Monitoring;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,24 +18,17 @@ class DetailMonitoringOwner
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // dd($request);
         $currentTeacher = Auth::user();
         $monitoringExists = DB::table('monitorings')->where('id', $request->id)->exists();
 
         if ($monitoringExists) {
-            $monitoring = DB::table('monitorings')->where('id', $request[0]['monitoring_id'])->get();
+            $monitoring = Monitoring::findOrFail($request->id);
 
-            // dd($monitoring);
-            if ($currentTeacher->nik === $monitoring[0]->teachers_nik) {
+            if ($currentTeacher->nik === $monitoring->teachers_nik) {
                 return $next($request);
-            } else {
-                return response()->json(['message' => 'you are not the owner']);
             }
-        } else {
-            return response()->json(['message' => 'data not found']);
         }
 
-        // dd($monitoringExists);
-        // fdsfsdfjkfhsj
+        return response()->json(['message' => 'data not found'], 404);
     }
 }

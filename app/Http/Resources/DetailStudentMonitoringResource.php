@@ -15,6 +15,7 @@ class DetailStudentMonitoringResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'monitoring_id' => $this->monitoring_id,
             'students_nisn' => $this->students_nisn,
             'keterangan' => $this->keterangan
