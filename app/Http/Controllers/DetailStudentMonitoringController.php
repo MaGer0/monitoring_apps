@@ -19,15 +19,17 @@ class DetailStudentMonitoringController
 
     public function index($id)
     {
-        $dsm = DB::table('detail_students_monitorings')->where('monitoring_id', $id)->get();
+        // $dsm = DB::table('detail_students_monitorings')->where('monitoring_id', $id)->get();
+        $dsm = DetailStudentMonitoring::query()->where('monitoring_id', $id)->get();
 
-        return DetailStudentMonitoringResource::collection($dsm);
+        return DetailStudentMonitoringResource::collection($dsm->loadMissing(['student:id,nisn,name,class']));
     }
 
     public function store(Request $request, $id)
     {
+
         $validated = $request->validate([
-            '*.monitoring_id' => 'required|integer|exists:monitorings,id',
+            // '*.monitoring_id' => 'required|integer|exists:monitorings,id',
             '*.students_nisn' => 'required|string',
             '*.keterangan' => 'required|string'
         ]);
@@ -43,20 +45,17 @@ class DetailStudentMonitoringController
             ];
         }, $validated);
 
-        DB::table('detail_students_monitorings')->insert($detailStudentMonitoring);
+        DetailStudentMonitoring::insert($detailStudentMonitoring);
 
-        // return new DetailStudentMonitoringResource($validated);
-        $resourceCollection = collect($detailStudentMonitoring)->map(function ($item) {
-            return new DetailStudentMonitoringResource((object) $item); // Konversi ke object agar sesuai dengan Resource
-        });
+        $newDsm  = DetailStudentMonitoring::where('monitoring_id', $id)->get();
 
-        return response()->json(['data' => $resourceCollection], 201);
+        return DetailStudentMonitoringResource::collection($newDsm->loadMissing(['student:id,nisn,name,class']));
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            '*.monitoring_id' => 'required|integer|exists:monitorings,id',
+            // '*.monitoring_id' => 'required|integer|exists:monitorings,id',
             '*.students_nisn' => 'required|string',
             '*.keterangan' => 'required|string'
         ]);
@@ -68,34 +67,33 @@ class DetailStudentMonitoringController
             ->delete();
 
         $now = Carbon::now();
-        $detailStudentMonitoring = array_map(function ($dsm) use ($now) {
+        $detailStudentMonitoring = array_map(function ($dsm) use ($now, $id) {
             return [
-                'monitoring_id' => $dsm['monitoring_id'],
+                'monitoring_id' => $id,
                 'students_nisn' => $dsm['students_nisn'],
                 'keterangan' => $dsm['keterangan'],
                 'updated_at' => $now
             ];
         }, $validated);
 
-        DB::table('detail_students_monitorings')->upsert(
+        DetailStudentMonitoring::upsert(
             $detailStudentMonitoring,
-            ['studenddts_nisn', 'monitoring_id'],
+            ['students_nisn', 'monitoring_id'],
             ['keterangan', 'updated_at']
         );
 
-        $resourceCollection = collect($detailStudentMonitoring)->map(function ($item) {
-            return new DetailStudentMonitoringResource((object) $item);
-        });
 
-        return response()->json(['data' => $resourceCollection], 201);
+        $newDsm  = DetailStudentMonitoring::where('monitoring_id', $id)->get();
+
+        return DetailStudentMonitoringResource::collection($newDsm->loadMissing(['student:id,nisn,name,class']));
     }
 
     public function destroy($id)
     {
-        $dsm = DB::table('detail_students_monitorings')->select()->where('monitoring_id', $id)->get();
+        $dsm = DetailStudentMonitoring::query()->where('monitoring_id', $id)->get();
 
         DB::table('detail_students_monitorings')->select()->where('monitoring_id', $id)->delete();
 
-        return DetailStudentMonitoringResource::collection($dsm);
+        return DetailStudentMonitoringResource::collection($dsm->loadMissing(['student:id,nisn,name,class']));
     }
 }
