@@ -6,6 +6,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Imports\StudentsImport;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Resources\StudentResource;
 
@@ -20,7 +21,9 @@ class StudentController extends Controller
 
     public function index()
     {
-        $students = Student::all();
+        $currentTeacher = Auth::user();
+
+        $students = Student::query()->where('teachers_nik', $currentTeacher->nik)->get();
 
         return StudentResource::collection($students);
     }

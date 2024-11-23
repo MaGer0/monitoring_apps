@@ -11,11 +11,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class TeacherController extends Controller
 {
-    // public function export()
-    // {
-    //     return Excel::download(new TeachersExport, 'teacher.xlsx');
-    // }
-
     public function me()
     {
         $currentTeacher = Auth::user();

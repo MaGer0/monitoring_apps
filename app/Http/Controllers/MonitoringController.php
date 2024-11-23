@@ -12,6 +12,19 @@ use Carbon\Carbon;
 
 class MonitoringController extends Controller
 {
+    private function validate(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'date' => 'required',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i'
+        ]);
+
+        return $validated;
+    }
+
     public function index()
     {
         $currentTeacher = Auth::user();
@@ -29,13 +42,7 @@ class MonitoringController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'date' => 'required',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i'
-        ]);
+        $validated = $this->validate($request);
 
         $validated['teachers_nik'] = Auth::user()->nik;
 
@@ -46,17 +53,13 @@ class MonitoringController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'date' => 'required',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i'
-        ]);
-        $validated['teachers_nik'] = Auth::user()->nik;
-        $monitoring = Monitoring::findOrFail($id);
-        $monitoring->update($validated);
+        $validated = $this->validate($request);
 
+        $validated['teachers_nik'] = Auth::user()->nik;
+
+        $monitoring = Monitoring::findOrFail($id);
+
+        $monitoring->update($validated);
 
         return (new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan'])))->response()->setStatusCode(200);
     }
