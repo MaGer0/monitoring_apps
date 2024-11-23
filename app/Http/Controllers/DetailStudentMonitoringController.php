@@ -16,6 +16,14 @@ use App\Http\Resources\DetailStudentMonitoringResource;
 
 class DetailStudentMonitoringController
 {
+
+    public function index($id)
+    {
+        $dsm = DB::table('detail_students_monitorings')->where('monitoring_id', $id)->get();
+
+        return DetailStudentMonitoringResource::collection($dsm);
+    }
+
     public function store(Request $request, $id)
     {
         $validated = $request->validate([
@@ -54,7 +62,7 @@ class DetailStudentMonitoringController
         ]);
 
         $nisnInRequest = array_column($validated, 'students_nisn');
-        dd($id);
+
         DetailStudentMonitoring::where('monitoring_id', $id)
             ->whereNotIn('students_nisn', $nisnInRequest)
             ->delete();

@@ -3,22 +3,47 @@
 namespace App\Imports;
 
 use App\Models\Student;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithSkipDuplicates;
 
 
-class StudentsImport implements ToCollection, WithHeadingRow, WithSkipDuplicates
+class StudentsImport implements ToModel, WithHeadingRow, WithSkipDuplicates
 {
-    public function collection(Collection $rows)
+    protected $nisnList = [];
+
+    public function model(array $row)
     {
-        foreach ($rows as $row) {
-            Student::create([
-                'nisn' => $row['nisn'],
-                'name' => $row['nama'],
-                'class' => $row['kelas'],
-            ]);
+
+        $this->nisnList[] = $row['nisn'];
+
+        if (empty(array_filter($row))) {
+            return null;
         }
+
+        return new Student([
+            'teachers_nik' => Auth::user()->nik,
+            'nisn' => $row['nisn'],
+            'name' => $row['nama'],
+            'class' => $row['kelas'],
+        ]);
+    }
+
+    public function batchSize(): int
+    {
+        return 1000;
+    }
+
+    public function uniqueBy()
+    {
+        return ['teachers_nik', 'nisn'];
+    }
+
+    public function __construct()
+    {
+        Student::whereNotIn('nisn', $this->nisnList)->delete();
     }
 }

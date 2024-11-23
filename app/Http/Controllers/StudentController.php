@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Imports\StudentsImport;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Resources\StudentResource;
-use App\Models\Student;
 
 class StudentController extends Controller
 {

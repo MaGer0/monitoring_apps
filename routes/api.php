@@ -28,7 +28,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/notpresents/{id}', [DetailStudentMonitoringController::class, 'update'])->middleware('DetailMonitoringOwner');
     Route::delete('/notpresents/{id}', [DetailStudentMonitoringController::class, 'destroy'])->middleware('DetailMonitoringOwner');
 
-    // Student 
+    // Student
     Route::post('/students/import', [StudentController::class, 'import']);
     Route::get('/students', [StudentController::class, 'index']);
 });
