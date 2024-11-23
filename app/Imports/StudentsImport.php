@@ -9,6 +9,8 @@ use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithSkipDuplicates;
+use Maatwebsite\Excel\Concerns\WithUpserts;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
 
 class StudentsImport implements ToModel, WithHeadingRow, WithSkipDuplicates
@@ -39,11 +41,15 @@ class StudentsImport implements ToModel, WithHeadingRow, WithSkipDuplicates
 
     public function uniqueBy()
     {
+<<<<<<< HEAD
         return ['teachers_nik', 'nisn'];
     }
 
     public function __construct()
     {
         Student::whereNotIn('nisn', $this->nisnList)->delete();
+=======
+        return ['nisn'];
+>>>>>>> 0efef2aea617b155ae1df725453de74463280923
     }
 }
