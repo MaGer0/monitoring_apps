@@ -17,7 +17,7 @@ class StudentResource extends JsonResource
         return [
             'nisn' => $this->nisn,
             'name' => $this->name,
-            'email' => $this->email
+            'class' => $this->class
         ];
     }
 }

@@ -12,6 +12,16 @@ use App\Http\Resources\DetailStudentMonitoringResource;
 class DetailStudentMonitoringController
 {
 
+    private function validate(Request $request)
+    {
+        $validated = $request->validate([
+            '*.students_nisn' => 'required|string',
+            '*.keterangan' => 'required|string'
+        ]);
+
+        return $validated;
+    }
+
     public function index($id)
     {
         $dsm = DetailStudentMonitoring::query()->where('monitoring_id', $id)->get();
@@ -22,10 +32,7 @@ class DetailStudentMonitoringController
     public function store(Request $request, $id)
     {
 
-        $validated = $request->validate([
-            '*.students_nisn' => 'required|string',
-            '*.keterangan' => 'required|string'
-        ]);
+        $validated = $this->validate($request);
 
         // Bulk Insert
         $now = Carbon::now();
@@ -47,10 +54,7 @@ class DetailStudentMonitoringController
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            '*.students_nisn' => 'required|string',
-            '*.keterangan' => 'required|string'
-        ]);
+        $validated = $this->validate($request);
 
         $nisnInRequest = array_column($validated, 'students_nisn');
 
