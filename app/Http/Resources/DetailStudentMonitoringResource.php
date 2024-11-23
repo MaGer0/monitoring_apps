@@ -16,7 +16,7 @@ class DetailStudentMonitoringResource extends JsonResource
     {
         return [
             'monitoring_id' => $this->monitoring_id,
-            'students_nisn' => $this->students_nisn,
+            'student' => $this->whenLoaded('student'),
             'keterangan' => $this->keterangan
         ];
     }
