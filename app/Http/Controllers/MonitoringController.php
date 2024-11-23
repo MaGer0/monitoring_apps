@@ -20,6 +20,13 @@ class MonitoringController extends Controller
         return MonitoringResource::collection($monitorings->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']));
     }
 
+    public function show($id)
+    {
+        $monitoring = Monitoring::findOrFail($id);
+
+        return new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
