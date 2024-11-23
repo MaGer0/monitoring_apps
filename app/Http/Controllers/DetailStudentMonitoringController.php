@@ -3,14 +3,9 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Monitoring;
-use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use function PHPSTORM_META\type;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-use Illuminate\Auth\Events\Validated;
 use App\Models\DetailStudentMonitoring;
 use App\Http\Resources\DetailStudentMonitoringResource;
 
@@ -19,7 +14,6 @@ class DetailStudentMonitoringController
 
     public function index($id)
     {
-        // $dsm = DB::table('detail_students_monitorings')->where('monitoring_id', $id)->get();
         $dsm = DetailStudentMonitoring::query()->where('monitoring_id', $id)->get();
 
         return DetailStudentMonitoringResource::collection($dsm->loadMissing(['student:id,nisn,name,class']));
@@ -29,7 +23,6 @@ class DetailStudentMonitoringController
     {
 
         $validated = $request->validate([
-            // '*.monitoring_id' => 'required|integer|exists:monitorings,id',
             '*.students_nisn' => 'required|string',
             '*.keterangan' => 'required|string'
         ]);
@@ -55,7 +48,6 @@ class DetailStudentMonitoringController
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            // '*.monitoring_id' => 'required|integer|exists:monitorings,id',
             '*.students_nisn' => 'required|string',
             '*.keterangan' => 'required|string'
         ]);
