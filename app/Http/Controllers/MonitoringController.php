@@ -11,7 +11,7 @@ use App\Http\Resources\MonitoringResource;
 use Carbon\Carbon;
 
 class MonitoringController extends Controller
-{
+{   
     private function validate(Request $request)
     {
         $validated = $request->validate([
