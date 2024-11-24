@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('students', function (Blueprint $table) {
+            $table->dropPrimary();
             $table->id();
             $table->string('teachers_nik')->after('id');
             $table->unique(['teachers_nik', 'nisn'], 'student_unique_new');
