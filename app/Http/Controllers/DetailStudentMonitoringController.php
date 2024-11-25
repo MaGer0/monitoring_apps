@@ -41,7 +41,8 @@ class DetailStudentMonitoringController
                 'monitoring_id' => $id,
                 'students_nisn' => $dsm['students_nisn'],
                 'keterangan' => $dsm['keterangan'],
-                'created_at' => $now
+                'created_at' => $now,
+                'updated_at' => $now
             ];
         }, $validated);
 
