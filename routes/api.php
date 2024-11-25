@@ -18,10 +18,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Monitoring
     Route::get('/monitorings', [MonitoringController::class, 'index']);
-    Route::get('monitorings/{id}', [MonitoringController::class, 'show'])->middleware('MonitoringOwner');
+    Route::get('/monitorings/{id}', [MonitoringController::class, 'show'])->middleware('MonitoringOwner');
     Route::post('/monitorings', [MonitoringController::class, 'store']);
     Route::put('/monitorings/{id}', [MonitoringController::class, 'update'])->middleware('MonitoringOwner');
     Route::delete('/monitorings/{id}', [MonitoringController::class, 'destroy'])->middleware('MonitoringOwner');
+
+    // Image
+    Route::put('/monitorings/{id}/image', [MonitoringController::class, 'changeImage'])->middleware('MonitoringOwner');
+    Route::delete('/monitorings/{id}/image', [MonitoringController::class, 'destroyImage'])->middleware('MonitoringOwner');
 
     // Detail Student Monitoring
     Route::get('/notpresents/{id}', [DetailStudentMonitoringController::class, 'index'])->middleware('DetailMonitoringOwner');
