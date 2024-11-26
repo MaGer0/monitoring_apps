@@ -125,7 +125,7 @@ class MonitoringsExport implements FromQuery, WithMapping, WithStrictNullCompari
 
                 $sheet->getPageSetup()
                     ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4) // Ukuran A4
-                    ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT); // Orientasi landscape
+                    ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE); // Orientasi landscape
 
                 foreach (range('A', 'F') as $column) {
                     $sheet->getColumnDimension($column)->setAutoSize(true);

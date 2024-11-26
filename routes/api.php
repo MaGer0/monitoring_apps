@@ -22,8 +22,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/monitorings', [MonitoringController::class, 'store']);
     Route::put('/monitorings/{id}', [MonitoringController::class, 'update'])->middleware('MonitoringOwner');
     Route::delete('/monitorings/{id}', [MonitoringController::class, 'destroy'])->middleware('MonitoringOwner');
-    Route::post('/export/sheet', [MonitoringController::class, 'exportXLSX']);
-    Route::post('/export/pdf', [MonitoringController::class, 'exportDOMPDF']);
+    Route::get('/export/excel', [MonitoringController::class, 'exportXLSX']);
+    Route::get('/export/pdf', [MonitoringController::class, 'exportDOMPDF']);
 
     // Image
     Route::put('/monitorings/{id}/image', [MonitoringController::class, 'changeImage'])->middleware('MonitoringOwner');
