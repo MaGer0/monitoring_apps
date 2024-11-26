@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Monitoring;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Excel;
+use App\Exports\MonitoringsExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DetailStudentMonitoring;
-use App\Http\Resources\MonitoringResource;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\MonitoringResource;
 
 class MonitoringController extends Controller
 {
@@ -25,6 +27,20 @@ class MonitoringController extends Controller
         ]);
 
         return $validated;
+    }
+
+    public function exportXLSX()
+    {
+        return (new MonitoringsExport)->forYear(2024)->download('Monitoring.xlsx', Excel::XLSX);
+    }
+
+    public function exportDOMPDF()
+    {
+        return (new MonitoringsExport)->forYear(2024)->download('Monitoring.pdf', Excel::DOMPDF, [
+            'page_size' => 'A4',
+            'orientation' => 'portrait',  // Mengubah orientasi menjadi potrait
+            'fit_to_page' => true,         // Fit ke halaman
+        ]);
     }
 
     public function index()

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('nik')->primary();
             $table->string('name', 100);
             $table->string('email')->unique();
-            $table->string('password')->unique();
+            $table->string('password');
             $table->timestamps();
             $table->softDeletes();
         });
