@@ -12,11 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->string('nisn')->primary();
+            $table->id();
+            $table->string('teachers_nik');
+            $table->string('nisn');
             $table->string('name', 100);
             $table->string('class');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->unique(['teachers_nik', 'nisn'], 'student_unique_upsert');
+            $table->unique('nisn', 'student_unique');
         });
     }
 

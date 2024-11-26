@@ -42,8 +42,9 @@ class StudentsImport implements ToModel, WithHeadingRow, WithSkipDuplicates, Wit
         return ['teachers_nik', 'nisn'];
     }
 
-    public function __construct()
+    public function __destruct()
     {
-        Student::whereNotIn('nisn', $this->nisnList)->delete();
+        $nisnList = array_filter($this->nisnList);
+        Student::whereNotIn('nisn', $nisnList)->delete();
     }
 }
