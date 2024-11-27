@@ -28,7 +28,7 @@ class MonitoringResource extends JsonResource
                 return collect($this->students)->map(function ($student) {
                     return new StudentResource($student->student);
                 });
-            })
+            }),
         ];
     }
 }

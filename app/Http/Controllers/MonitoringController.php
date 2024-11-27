@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DetailStudentMonitoring;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\MonitoringResource;
+use App\Http\Resources\MonitoringCollection;
 
 class MonitoringController extends Controller
 {
@@ -38,17 +39,19 @@ class MonitoringController extends Controller
     {
         return (new MonitoringsExport)->forYear(2024)->download('Monitoring.pdf', Excel::DOMPDF, [
             'page_size' => 'A4',
-            'orientation' => 'portrait',  // Mengubah orientasi menjadi potrait
-            'fit_to_page' => true,         // Fit ke halaman
+            'orientation' => 'portrait',
+            'fit_to_page' => true,
         ]);
     }
 
     public function index()
     {
         $currentTeacher = Auth::user();
-        $monitorings = $currentTeacher->monitorings;
+        $monitorings = Monitoring::where('teachers_nik', $currentTeacher->nik)->paginate(3);
 
-        return MonitoringResource::collection($monitorings->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']));
+        $monitorings->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']);
+
+        return MonitoringResource::collection($monitorings);
     }
 
     public function show($id)
