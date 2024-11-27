@@ -110,7 +110,7 @@ class MonitoringsExport implements FromQuery, WithMapping, WithStrictNullCompari
                     ->getStartColor()
                     ->setRGB('FABE64');
 
-                $sheet->getStyle('A1:' . $highestColumn . '2')
+                $sheet->getStyle('A1:' . $highestColumn . $highestRow)
                     ->getAlignment()
                     ->setHorizontal('center');
 
