@@ -23,7 +23,7 @@ class StudentController extends Controller
     {
         $currentTeacher = Auth::user();
 
-        $students = Student::query()->where('teachers_nik', $currentTeacher->nik)->get();
+        $students = Student::query()->where('teachers_nik', $currentTeacher->nik)->paginate(3);
 
         return StudentResource::collection($students);
     }

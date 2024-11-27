@@ -20,7 +20,6 @@ class MonitoringResource extends JsonResource
             'title' => $this->title,
             'Teacher' => $this->whenLoaded('teacher'),
             'description' => $this->description,
-            'image' => $this->image,
             'date' => $this->date,
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,
