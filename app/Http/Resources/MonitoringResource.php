@@ -18,6 +18,7 @@ class MonitoringResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'image' => $this->image,
             'Teacher' => $this->whenLoaded('teacher'),
             'description' => $this->description,
             'date' => $this->date,
