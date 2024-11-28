@@ -65,7 +65,7 @@ class MonitoringController extends Controller
     {
         $validated = $this->validate($request);
 
-        if ($validated['image']) {
+        if (isset($validated['image'])) {
             $imageName = $this->generateRandomString();
             $extension = $validated['image']->extension();
             $image = $imageName . '.' . $extension;
