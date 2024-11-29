@@ -16,26 +16,31 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Current Teacher
     Route::get('/teachers/@me', [TeacherController::class, 'me']);
 
-    // Monitoring
+    // CRUD Monitoring
     Route::get('/monitorings', [MonitoringController::class, 'index']);
     Route::get('/monitorings/{id}', [MonitoringController::class, 'show'])->middleware('MonitoringOwner');
     Route::post('/monitorings', [MonitoringController::class, 'store']);
     Route::put('/monitorings/{id}', [MonitoringController::class, 'update'])->middleware('MonitoringOwner');
     Route::delete('/monitorings/{id}', [MonitoringController::class, 'destroy'])->middleware('MonitoringOwner');
+
+    // Export Monitoring
     Route::get('/export/excel', [MonitoringController::class, 'exportXLSX']);
     Route::get('/export/pdf', [MonitoringController::class, 'exportDOMPDF']);
+
+    // Search Monitoring
+    Route::get('/monitorings/search/{search}', [MonitoringController::class, 'search']);
 
     // Image
     Route::put('/monitorings/{id}/image', [MonitoringController::class, 'changeImage'])->middleware('MonitoringOwner');
     Route::delete('/monitorings/{id}/image', [MonitoringController::class, 'destroyImage'])->middleware('MonitoringOwner');
 
-    // Detail Student Monitoring
+    // CRUD Detail Student Monitoring
     Route::get('/notpresents/{id}', [DetailStudentMonitoringController::class, 'index'])->middleware('DetailMonitoringOwner');
     Route::post('/notpresents/{id}', [DetailStudentMonitoringController::class, 'store'])->middleware('DetailMonitoringOwner');
     Route::put('/notpresents/{id}', [DetailStudentMonitoringController::class, 'update'])->middleware('DetailMonitoringOwner');
     Route::delete('/notpresents/{id}', [DetailStudentMonitoringController::class, 'destroy'])->middleware('DetailMonitoringOwner');
 
-    // Student
+    // CRUD Student
     Route::post('/students/import', [StudentController::class, 'import']);
     Route::get('/students', [StudentController::class, 'index']);
 });
