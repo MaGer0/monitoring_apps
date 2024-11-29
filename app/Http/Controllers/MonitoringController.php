@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Monitoring;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
 use App\Exports\MonitoringsExport;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Models\DetailStudentMonitoring;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\MonitoringResource;
-use App\Http\Resources\MonitoringCollection;
+use Illuminate\Support\Facades\DB;
+
+use function PHPSTORM_META\map;
 
 class MonitoringController extends Controller
 {
@@ -141,5 +140,31 @@ class MonitoringController extends Controller
         }
 
         return $randomString;
+    }
+
+    public function search($value)
+    {;
+        urldecode($value);
+
+        $searchs = explode(' ', $value);
+
+        $searchArray = array_map(function ($string) {
+            return "+" . $string . "*";
+        }, $searchs);
+
+        $search = implode(' ', $searchArray);
+
+        $currentTeacher = Auth::user();
+
+        $monitoring = Monitoring::select('*')
+            ->where('teachers_nik', $currentTeacher->nik)
+            ->whereRaw("MATCH(title, description) AGAINST(? IN BOOLEAN MODE)", [$search])
+            ->orderByRaw("MATCH(title) AGAINST(? IN BOOLEAN MODE) DESC", [$search])
+            ->orderBy('title', 'asc')
+            ->get();
+
+        $monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']);
+
+        return MonitoringResource::collection($monitoring)->response()->setStatusCode(200);
     }
 }
