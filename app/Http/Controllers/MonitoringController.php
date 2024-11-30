@@ -150,13 +150,14 @@ class MonitoringController extends Controller
 
         $searchs = explode(' ', $value);
 
-        $filteredArray = array_filter($searchs, function ($value) {
-            return $value !== "";
-        });
-
-        $searchArray = array_map(function ($string) {
-            return "+" . $string . "*";
-        }, $filteredArray);
+        $searchArray = array_map(
+            function ($string) {
+                return "+" . $string . "*";
+            },
+            array_filter($searchs, function ($value) {
+                return $value !== "";
+            })
+        );
 
         $search = implode(' ', $searchArray);
 
