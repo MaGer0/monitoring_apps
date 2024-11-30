@@ -27,4 +27,30 @@ class StudentController extends Controller
 
         return StudentResource::collection($students);
     }
+
+    public function search($value)
+    {
+        urldecode($value);
+
+        $searchs = explode(' ', $value);
+
+        $filteredArray = array_filter($searchs, function ($string) {
+            return $string !== "";
+        });
+
+        $arraySearch = array_map(function ($string) {
+            return "+" . $string . "*";
+        }, $filteredArray);
+
+        $search = implode(' ', $arraySearch);
+
+        $currentTeacher = Auth::user();
+
+        $students = Student::select('*')
+            ->where('teachers_nik', $currentTeacher->nik)
+            ->whereRaw("MATCH(name, class) AGAINST(? IN BOOLEAN MODE)", [$search])
+            ->get();
+
+        return StudentResource::collection($students);
+    }
 }

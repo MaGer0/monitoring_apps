@@ -9,8 +9,10 @@ use App\Exports\MonitoringsExport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\MonitoringResource;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
+use function Laravel\Prompts\error;
 use function PHPSTORM_META\map;
 
 class MonitoringController extends Controller
@@ -148,23 +150,23 @@ class MonitoringController extends Controller
 
         $searchs = explode(' ', $value);
 
+        $filteredArray = array_filter($searchs, function ($value) {
+            return $value !== "";
+        });
+
         $searchArray = array_map(function ($string) {
             return "+" . $string . "*";
-        }, $searchs);
+        }, $filteredArray);
 
         $search = implode(' ', $searchArray);
 
         $currentTeacher = Auth::user();
 
-        $monitoring = Monitoring::select('*')
-            ->where('teachers_nik', $currentTeacher->nik)
+        $monitorings = Monitoring::where('teachers_nik', $currentTeacher->nik)
             ->whereRaw("MATCH(title, description) AGAINST(? IN BOOLEAN MODE)", [$search])
             ->orderByRaw("MATCH(title) AGAINST(? IN BOOLEAN MODE) DESC", [$search])
-            ->orderBy('title', 'asc')
             ->get();
 
-        $monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']);
-
-        return MonitoringResource::collection($monitoring)->response()->setStatusCode(200);
+        return MonitoringResource::collection($monitorings->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']))->response()->setStatusCode(200);
     }
 }

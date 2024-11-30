@@ -27,8 +27,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/export/excel', [MonitoringController::class, 'exportXLSX']);
     Route::get('/export/pdf', [MonitoringController::class, 'exportDOMPDF']);
 
-    // Search Monitoring
+    // Search 
     Route::get('/monitorings/search/{search}', [MonitoringController::class, 'search']);
+    Route::get('/students/search/{search}', [StudentController::class, 'search']);
 
     // Image
     Route::put('/monitorings/{id}/image', [MonitoringController::class, 'changeImage'])->middleware('MonitoringOwner');
