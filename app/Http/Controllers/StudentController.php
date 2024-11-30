@@ -34,13 +34,14 @@ class StudentController extends Controller
 
         $searchs = explode(' ', $value);
 
-        $filteredArray = array_filter($searchs, function ($string) {
-            return $string !== "";
-        });
-
-        $arraySearch = array_map(function ($string) {
-            return "+" . $string . "*";
-        }, $filteredArray);
+        $arraySearch = array_map(
+            function ($string) {
+                return "+" . $string . "*";
+            },
+            array_filter($searchs, function ($string) {
+                return $string !== "";
+            })
+        );
 
         $search = implode(' ', $arraySearch);
 
