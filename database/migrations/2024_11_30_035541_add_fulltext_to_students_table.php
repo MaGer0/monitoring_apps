@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->fullText(['nisn', 'name']);
+            $table->fullText(['name', 'class']);
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->dropFullText(['nisn', 'name']);
+            $table->dropFullText(['name', 'class']);
         });
     }
 };
