@@ -9,11 +9,6 @@ use App\Exports\MonitoringsExport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\MonitoringResource;
-use Exception;
-use Illuminate\Support\Facades\DB;
-
-use function Laravel\Prompts\error;
-use function PHPSTORM_META\map;
 
 class MonitoringController extends Controller
 {
@@ -48,7 +43,7 @@ class MonitoringController extends Controller
     public function index()
     {
         $currentTeacher = Auth::user();
-        $monitorings = Monitoring::where('teachers_nik', $currentTeacher->nik)->latest()->paginate(3);
+        $monitorings = Monitoring::where('teachers_nik', $currentTeacher->nik)->latest()->paginate(10);
 
         $monitorings->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan']);
 
