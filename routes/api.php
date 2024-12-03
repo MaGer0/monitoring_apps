@@ -45,3 +45,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/students/import', [StudentController::class, 'import']);
     Route::get('/students', [StudentController::class, 'index']);
 });
+
+Route::delete('/test/delete/image', [MonitoringController::class, 'testDeleteImage']);
