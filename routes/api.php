@@ -32,7 +32,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/students/search/{search}', [StudentController::class, 'search']);
 
     // Image
-    Route::put('/monitorings/{id}/image', [MonitoringController::class, 'changeImage'])->middleware('MonitoringOwner');
+    Route::put('/monitorings/{id}/image', [MonitoringController::class, 'updateImage'])->middleware('MonitoringOwner');
     Route::delete('/monitorings/{id}/image', [MonitoringController::class, 'destroyImage'])->middleware('MonitoringOwner');
 
     // CRUD Detail Student Monitoring

@@ -103,6 +103,8 @@ class MonitoringController extends Controller
 
         $monitoring = Monitoring::findOrFail($id);
 
+        Storage::disk('public')->delete("images/" . $monitoring->image);
+
         $monitoring->update($validated);
 
         return (new MonitoringResource($monitoring->loadMissing(['teacher:nik,name,email,password', 'students:id,monitoring_id,students_nisn,keterangan'])))->response()->setStatusCode(200);
