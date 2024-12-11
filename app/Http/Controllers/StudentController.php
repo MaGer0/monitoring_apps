@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Resources\StudentResource;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -53,5 +54,10 @@ class StudentController extends Controller
             ->get();
 
         return StudentResource::collection($students);
+    }
+
+    public function example()
+    {
+        return Storage::download('Students_Format.xlsx');
     }
 }
