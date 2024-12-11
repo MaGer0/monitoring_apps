@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\DetailStudentMonitoring;
 use App\Http\Resources\DetailStudentMonitoringResource;
+use Illuminate\Routing\Controller;
 
-class DetailStudentMonitoringController
+class DetailStudentMonitoringController extends Controller
 {
 
     private function validate(Request $request)
