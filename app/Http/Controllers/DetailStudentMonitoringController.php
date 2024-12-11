@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\DetailStudentMonitoring;
 use App\Http\Resources\DetailStudentMonitoringResource;
-use Illuminate\Routing\Controller;
 
 class DetailStudentMonitoringController extends Controller
 {
