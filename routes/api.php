@@ -44,6 +44,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // CRUD Student
     Route::post('/students/import', [StudentController::class, 'import']);
     Route::get('/students', [StudentController::class, 'index']);
+
+    // Download Format Import Student
+    Route::get('/students/example', [StudentController::class, 'example']);
 });
 
 Route::delete('/test/delete/image', [MonitoringController::class, 'testDeleteImage']);

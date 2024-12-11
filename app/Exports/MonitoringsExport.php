@@ -19,10 +19,6 @@ class MonitoringsExport implements FromQuery, WithMapping, WithStrictNullCompari
 {
     use Exportable;
 
-    // private $fileName = 'Monitoring.xlsx';
-
-    // private $writerType = Excel::XLSX;
-
     private int $year;
     private int $month;
 
