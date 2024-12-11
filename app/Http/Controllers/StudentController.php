@@ -58,6 +58,6 @@ class StudentController extends Controller
 
     public function example()
     {
-        return Storage::download('Students_Format.xlsx');
+        return response()->download(public_path('files/Students_Format.xlsx'));
     }
 }
