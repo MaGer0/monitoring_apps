@@ -3,31 +3,66 @@
 namespace App\Exports;
 
 use App\Models\Monitoring;
-use Maatwebsite\Excel\Excel;
+use Maatwebsite\Excel\Sheet;
+use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Illuminate\Contracts\Support\Responsable;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Sheet;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class MonitoringsExport implements FromQuery, WithMapping, WithStrictNullComparison, WithHeadings, ShouldAutoSize, WithEvents
+class MonitoringsExport implements FromQuery, WithMapping, WithStrictNullComparison, WithHeadings, WithEvents, WithColumnWidths, ShouldAutoSize
 {
     use Exportable;
 
     private int $year;
     private int $month;
+    private $exportType;
+
+    public function setExportType($type)
+    {
+        $this->exportType = $type;
+        return $this;
+    }
+
+    public function columnWidths(): array
+    {
+
+        if ($this->exportType === 'Excel') {
+            return [
+                'A' => 4,
+                'B' => 15,
+                'C' => 60,
+                'D' => 15,
+                'E' => 15,
+                'F' => 15,
+                'G' => 15,
+                'H' => 15,
+                'I' => 15,
+            ];
+        }
+        
+        return [
+            'A' => 4,
+            'B' => 15,
+            'C' => 40,
+            'D' => 12,
+            'E' => 12,
+            'F' => 12,
+            'G' => 17,
+            'H' => 17,
+            'I' => 17,
+        ];
+    }
 
     function filterStudent($monitoring, $ket)
     {
         $filtered = $monitoring->students->filter(function ($student) use ($ket) {
             return $student->keterangan == $ket;
         })->map(function ($student) {
-            // return json_decode($student->student->name, true);
             return $student->student->name;
         })->join(", ");
 
@@ -93,7 +128,6 @@ class MonitoringsExport implements FromQuery, WithMapping, WithStrictNullCompari
                 $sheet->mergeCells('D1:D2');
                 $sheet->mergeCells('E1:E2');
                 $sheet->mergeCells('F1:F2');
-
                 $sheet->mergeCells('G1:I1');
 
                 $sheet->getStyle('A1:' . $highestColumn . '2')
@@ -110,9 +144,13 @@ class MonitoringsExport implements FromQuery, WithMapping, WithStrictNullCompari
                     ->getAlignment()
                     ->setHorizontal('center');
 
-                $sheet->getStyle('A1:' . $highestColumn . '2')
+                $sheet->getStyle('A1:' . $highestColumn . $highestRow)
                     ->getAlignment()
                     ->setVertical('center');
+
+                $sheet->getStyle('C1:C' . $highestRow)
+                    ->getAlignment()
+                    ->setWrapText(true);
 
                 $sheet->getStyle('A1:' . $highestColumn . $highestRow)
                     ->getBorders()
@@ -120,18 +158,18 @@ class MonitoringsExport implements FromQuery, WithMapping, WithStrictNullCompari
                     ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                 $sheet->getPageSetup()
-                    ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4) // Ukuran A4
-                    ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE); // Orientasi landscape
-
-                foreach (range('A', 'F') as $column) {
-                    $sheet->getColumnDimension($column)->setAutoSize(true);
-                }
+                    ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4)
+                    ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
 
                 $sheet->getPageSetup()
-                    ->setFitToWidth(1);
-
-                $sheet->getPageSetup()
+                    ->setFitToWidth(1)
                     ->setFitToHeight(0);
+
+                $sheet->getPageMargins()
+                    ->setTop(0.5)
+                    ->setRight(0.5)
+                    ->setLeft(0.5)
+                    ->setBottom(0.5);
             })
         ];
     }

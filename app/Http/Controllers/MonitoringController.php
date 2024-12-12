@@ -28,16 +28,20 @@ class MonitoringController extends Controller
 
     public function exportXLSX()
     {
-        return (new MonitoringsExport)->forYear(2024)->download('Monitoring.xlsx', Excel::XLSX);
+        $export = new MonitoringsExport();
+
+        $export->setExportType('Excel');
+
+        return $export->forYear(2024)->download('Monitoring.xlsx', Excel::XLSX);
     }
 
     public function exportDOMPDF()
     {
-        return (new MonitoringsExport)->forYear(2024)->download('Monitoring.pdf', Excel::DOMPDF, [
-            'page_size' => 'A4',
-            'orientation' => 'portrait',
-            'fit_to_page' => true,
-        ]);
+        $export = new MonitoringsExport();
+
+        $export->setExportType('PDF');
+
+        return $export->forYear(2024)->download('Monitoring.pdf', Excel::DOMPDF);
     }
 
     public function index()
