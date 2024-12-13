@@ -44,7 +44,7 @@ class MonitoringsExport implements FromQuery, WithMapping, WithStrictNullCompari
                 'I' => 15,
             ];
         }
-        
+
         return [
             'A' => 4,
             'B' => 15,
@@ -148,7 +148,7 @@ class MonitoringsExport implements FromQuery, WithMapping, WithStrictNullCompari
                     ->getAlignment()
                     ->setVertical('center');
 
-                $sheet->getStyle('C1:C' . $highestRow)
+                $sheet->getStyle('A1:' . $highestColumn . $highestRow)
                     ->getAlignment()
                     ->setWrapText(true);
 
